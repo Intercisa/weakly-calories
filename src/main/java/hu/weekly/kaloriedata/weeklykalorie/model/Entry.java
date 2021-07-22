@@ -2,40 +2,41 @@ package hu.weekly.kaloriedata.weeklykalorie.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Entry {
-    public Long nID;
-    public double nFat;
-    public double nCarbo;
-    public double nProtein;
-    public double nCalorie;
-    public double nWeight;
-    public String cDisplayName;
-    public double nQuantity;
-    public String unitDisplayName;
-    public double bRecept;
-    public int nFoodID;
-    public int nFoodUnitRef;
-    public String unitDisplayName2;
-    public double sumWeight;
-    public String cName;
-    public String nDayoftimeRef;
-    public Object nSynonymFoodRef;
-    public int bSum;
-    public String cleanedname;
-    public String url;
-    public String url_id;
-    public String unit_id;
-    public String unit_text;
-    public String food_id;
-    public Object fav_id;
-    public Object fb_table_id;
-    public String bOriginal;
-    public String food_nCreated;
-    public int edit_able;
-    public String hour_min;
+    private Long nID;
+    private double nFat;
+    private double nCarbo;
+    private double nProtein;
+    private double nCalorie;
+    private double nWeight;
+    private String cDisplayName;
+    private double nQuantity;
+    private String unitDisplayName;
+    private double bRecept;
+    private int nFoodID;
+    private int nFoodUnitRef;
+    private String unitDisplayName2;
+    private double sumWeight;
+    private String cName;
+    private String nDayoftimeRef;
+    private Object nSynonymFoodRef;
+    private int bSum;
+    private String cleanedname;
+    private String url;
+    private String url_id;
+    private String unit_id;
+    private String unit_text;
+    private String food_id;
+    private Object fav_id;
+    private Object fb_table_id;
+    private String bOriginal;
+    private String food_nCreated;
+    private int edit_able;
+    private String hour_min;
 }

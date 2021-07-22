@@ -4,14 +4,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class DailyCalorie{
-    public String graptype;
-    public String type;
-    public double position;
-    public double max;
-    public String error;
-    public String dailycal;
+public class DailyCalorie {
+    private List<Entry> results;
+    private String rfoodsum;
+    private String rfoodsumFat;
+    private String rfoodsumProtein;
+    private String rfoodsumCarbo;
 }

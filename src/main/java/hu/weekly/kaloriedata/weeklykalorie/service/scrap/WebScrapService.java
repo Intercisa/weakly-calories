@@ -1,25 +1,29 @@
-package hu.weekly.kaloriedata.weeklykalorie.service;
+package hu.weekly.kaloriedata.weeklykalorie.service.scrap;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import hu.weekly.kaloriedata.weeklykalorie.model.DailyMax;
 import hu.weekly.kaloriedata.weeklykalorie.model.DailyCalorie;
-import hu.weekly.kaloriedata.weeklykalorie.model.DailyCalorieData;
+import hu.weekly.kaloriedata.weeklykalorie.model.Entry;
+import hu.weekly.kaloriedata.weeklykalorie.model.dto.DailyCalorieData;
+import hu.weekly.kaloriedata.weeklykalorie.model.dto.FoodData;
+import hu.weekly.kaloriedata.weeklykalorie.model.dto.Pair;
 import lombok.SneakyThrows;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.fluent.Request;
 import org.apache.http.entity.ContentType;
 import org.apache.http.util.EntityUtils;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class WebScrapService {
-    final static String TXT_USERNAME = "txtusern=";
-    final static String USERNAME = "intercisa";
-    final static String TXP_PASSWORD = "txtpassw=";
-    final static String PASSWORD = "Sagi11arius";
-    final static String URL = "https://kaloriabazis.hu/bejelentkezes";
-    final static Pattern CALORIE_DAILY_DATA = Pattern.compile("\"results\".*\"rlast_10\"");
-    final static Pattern CALORIE_STANDARD = Pattern.compile("\"graptype\".*\"dailycal\":\"[0-9]{4}\"");
+public class WebScrapService extends BaseScrapService<Pair<DailyCalorie, DailyMax>> {
+
+    private final String page;
+
+    public WebScrapService() {
+        page = scrapPage();
+    }
 
     @SneakyThrows
     private String scrapPage() {
@@ -35,32 +39,37 @@ public class WebScrapService {
     }
 
     @SneakyThrows
-    public DailyCalorieData scrapDailyCalorieData() {
-        String html = scrapPage();
+    private DailyCalorie scrapDailyCalorieData() {
+        String html = page;
 
         assert html != null;
         Matcher m = CALORIE_DAILY_DATA.matcher(html);
-        DailyCalorieData dailyCalorieData = null;
+        DailyCalorie dailyCalorieData = null;
         if (m.find()) {
             String jsonData = "{" + m.group(0).substring(0, m.group(0).length() - 11) + "}";
             ObjectMapper mapper = new ObjectMapper();
-            dailyCalorieData = mapper.readValue(jsonData, DailyCalorieData.class);
+            dailyCalorieData = mapper.readValue(jsonData, DailyCalorie.class);
         }
         return dailyCalorieData;
     }
 
     @SneakyThrows
-    public DailyCalorie scrapStandardCalorie() {
-        String html = scrapPage();
+    private DailyMax scrapStandardCalorie() {
+        String html = page;
 
         assert html != null;
         Matcher m = CALORIE_STANDARD.matcher(html);
-        DailyCalorie dailyCalorie = null;
+        DailyMax dailyMax = null;
         if (m.find()) {
             String jsonMax = "{" + m.group(0) + "}";
             ObjectMapper mapper = new ObjectMapper();
-            dailyCalorie = mapper.readValue(jsonMax, DailyCalorie.class);
+            dailyMax = mapper.readValue(jsonMax, DailyMax.class);
         }
-        return dailyCalorie;
+        return dailyMax;
+    }
+
+    @Override
+    public Pair<DailyCalorie, DailyMax> getData() {
+        return new Pair<>(scrapDailyCalorieData(), scrapStandardCalorie());
     }
 }
